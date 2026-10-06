@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { story, projects } from '../data.js';
+import { story } from '../data.js';
 import Avatar from './Avatar.jsx';
 
 // Props the guide holds up, drawn in the avatar's 120x120 space just above the raised hand (≈105, 66).
@@ -61,7 +61,7 @@ function GuideProps({ pose }) {
 
 const AUTO_MS = 8000; // how long each slide shows before the next
 
-export default function Story({ onOpenProject }) {
+export default function Story() {
   const [index, setIndex] = useState(0);
   const swipeStart = useRef(null);
   const last = story.length - 1;
@@ -133,7 +133,7 @@ export default function Story({ onOpenProject }) {
         </div>
 
         <div className="carousel" onKeyDown={onKeyDown}>
-          <div className="carousel-tabs" role="tablist" aria-label="Story steps">
+          <div className="carousel-tabs" role="tablist" aria-label="Approach steps">
             {story.map((s, i) => (
               <button
                 key={s.id}
@@ -175,27 +175,6 @@ export default function Story({ onOpenProject }) {
                       {para}
                     </p>
                   ))}
-                  {s.examples && (
-                    <div className="slide-example">
-                      <span className="slide-example-label">Work in practice</span>
-                      <ul>
-                        {s.examples.map((example) => (
-                          <li key={example.project}>
-                            <button
-                              type="button"
-                              className="link-btn"
-                              tabIndex={i === index ? 0 : -1}
-                              onClick={() => onOpenProject(example.project)}
-                            >
-                              {projects.find((p) => p.id === example.project).title}
-                              <span aria-hidden="true">→</span>
-                            </button>
-                            <span className="slide-example-text">{example.text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                   {s.tags && (
                     <ul className="slide-tags">
                       {s.tags.map((t) => (

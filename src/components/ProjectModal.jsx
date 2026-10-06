@@ -1,5 +1,13 @@
 import { useState } from 'react';
 import { statusById, themeTag } from '../data.js';
+import ChatDemo from './ChatDemo.jsx';
+import FilesDemo from './FilesDemo.jsx';
+import ExplorerDemo from './ExplorerDemo.jsx';
+import DenseDemo from './DenseDemo.jsx';
+import PosterDemo from './PosterDemo.jsx';
+import CompanionDemo from './CompanionDemo.jsx';
+import JargonDemo from './JargonDemo.jsx';
+import VideoCarousel from './VideoCarousel.jsx';
 import Modal from './Modal.jsx';
 import SocialLinks from './SocialLinks.jsx';
 
@@ -142,6 +150,29 @@ function Body({ block }) {
       {[].concat(block.after ?? []).map((text) => (
         <p key={text}>{renderText(text)}</p>
       ))}
+      {block.chat && <ChatDemo chat={block.chat} />}
+      {block.files && <FilesDemo demo={block.files} />}
+      {block.explorer && <ExplorerDemo demo={block.explorer} />}
+      {block.dense && <DenseDemo demo={block.dense} />}
+      {block.poster && <PosterDemo demo={block.poster} />}
+      {block.companion && <CompanionDemo demo={block.companion} />}
+      {block.jargon && <JargonDemo demo={block.jargon} />}
+      {block.videos && <VideoCarousel videos={block.videos} />}
+      {block.embed && (
+        <figure className="embed-demo">
+          <div className="embed-window">
+            <div className="embed-bar">
+              <span className="embed-dots" aria-hidden="true" />
+              <span className="embed-url">{block.embed.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+              <a href={block.embed.url} target="_blank" rel="noreferrer" className="link-btn">
+                Open full size <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <iframe src={block.embed.url} title={block.embed.title} loading="lazy" />
+          </div>
+          <figcaption className="chat-caption">{block.embed.caption}</figcaption>
+        </figure>
+      )}
       {block.quotes?.map((quote) => (
         <blockquote key={quote} className="modal-quote">“{quote}”</blockquote>
       ))}
@@ -175,9 +206,11 @@ export default function ProjectModal({ project, onClose }) {
   const [active, setActive] = useState(0);
 
   return (
-    <Modal labelledBy="project-modal-title" onClose={onClose} className={tabs.length > 1 ? 'modal-wide' : ''}>
+    <Modal labelledBy="project-modal-title" onClose={onClose} className={tabs.length > 1 ? 'modal-wide' : 'modal-roomy'}>
       <p className="eyebrow eyebrow-skill" style={{ '--c': theme.color }}>
-        <span className="chip-dot" /> {theme.label} · {project.kind} · {statusById[project.status].label}
+        <span className="chip-dot" /> {theme.label} · {project.kind}
+        {statusById[project.status] && ` · ${statusById[project.status].label}`}
+        {project.year && ` · ${project.year}`}
       </p>
       <h2 id="project-modal-title" className="modal-title">{project.title}</h2>
       <p className="modal-tagline">{project.tagline}</p>

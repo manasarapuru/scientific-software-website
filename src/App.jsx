@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import {
   profile,
   themes,
   statuses,
+  skillGroups,
   projects,
   skillById,
   themeById,
@@ -23,8 +24,11 @@ import ResumePage from './components/ResumePage.jsx';
 import SocialLinks from './components/SocialLinks.jsx';
 import SocialIcons from './components/SocialIcons.jsx';
 
-function Header({ theme, onToggleTheme }) {
+function Header({ theme, onToggleTheme, onAbout }) {
   const dark = theme === 'dark';
+  // On narrow screens the links fold away into a menu, opened with the button at the end of the bar.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <header className="site-header">
@@ -32,11 +36,25 @@ function Header({ theme, onToggleTheme }) {
         <a href="#top" className="brand">
           <span className="brand-name">{profile.name}</span>
         </a>
-        <nav className="header-nav">
-          <a href="#story" className="nav-link">Story</a>
-          <a href="#explore" className="nav-link">Work</a>
-          <a href="#/resume" className="nav-link">Resume</a>
-          <a href="#/contact" className="btn btn-primary">Get in touch</a>
+        <nav className={`header-nav ${menuOpen ? 'is-open' : ''}`}>
+          <div id="nav-links" className="nav-links">
+            <a href="#story" className="nav-link" onClick={closeMenu}>Approach</a>
+            <a href="#explore" className="nav-link" onClick={closeMenu}>Work</a>
+            <button
+              type="button"
+              className="nav-link"
+              onClick={() => {
+                closeMenu();
+                onAbout();
+              }}
+            >
+              About me
+            </button>
+            <a href="#/resume" className="nav-link" onClick={closeMenu}>Resume</a>
+            {/* in the menu on the narrowest screens, where the button in the bar has no room */}
+            <a href="#/contact" className="nav-link nav-contact" onClick={closeMenu}>Get in touch</a>
+          </div>
+          <a href="#/contact" className="btn btn-primary" onClick={closeMenu}>Get in touch</a>
           <button
             type="button"
             className="theme-toggle"
@@ -53,6 +71,18 @@ function Header({ theme, onToggleTheme }) {
               ) : (
                 <path d="M20 14.5A8 8 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5z" strokeLinejoin="round" />
               )}
+            </svg>
+          </button>
+          <button
+            type="button"
+            className="nav-toggle"
+            aria-expanded={menuOpen}
+            aria-controls="nav-links"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
             </svg>
           </button>
         </nav>
@@ -111,16 +141,20 @@ const FACETS = [
   },
   {
     id: 'status',
-    label: 'Ship type',
+    label: 'Status',
     options: statuses.map((st) => ({ id: st.id, label: st.label, color: st.color })),
     has: (project, id) => project.status === id,
   },
   {
     id: 'skill',
     label: 'Skills',
-    options: [...new Set(projects.flatMap((p) => p.skills))]
-      .sort((a, b) => a.localeCompare(b))
-      .map((name) => ({ id: name, label: name })),
+    // grouped as laid out in the data, keeping only skills some project uses; strays go under "Other"
+    options: (() => {
+      const used = [...new Set(projects.flatMap((p) => p.skills))];
+      const placed = skillGroups.flatMap((g) => g.skills.filter((name) => used.includes(name)).map((name) => ({ id: name, label: name, group: g.label })));
+      const strays = used.filter((name) => !placed.some((option) => option.id === name)).sort((a, b) => a.localeCompare(b));
+      return [...placed, ...strays.map((name) => ({ id: name, label: name, group: 'Other' }))];
+    })(),
     has: (project, id) => project.skills.includes(id),
   },
 ];
@@ -136,6 +170,7 @@ function passes(project, filters, except) {
 
 function ProjectCard({ project, state, onHover, onOpen }) {
   const theme = themeTag(project);
+  const status = statusById[project.status];
 
   return (
     <li>
@@ -155,13 +190,19 @@ function ProjectCard({ project, state, onHover, onOpen }) {
             {theme.label}
             <span className="project-kind">{project.kind}</span>
           </span>
-          <span className="project-status" style={{ '--c': statusById[project.status].color }}>
-            {statusById[project.status].label}
-          </span>
           <span className="project-arrow" aria-hidden="true">↗</span>
         </span>
         <span className="project-title">{project.title}</span>
         <span className="project-tagline">{project.tagline}</span>
+        <span className="project-foot">
+          {/* a status doesn't apply to everything; the year then sits alone */}
+          {status ? (
+            <span className="project-status" style={{ '--c': status.color }}>{status.label}</span>
+          ) : (
+            <span />
+          )}
+          {project.year && <span className="project-year">{project.year}</span>}
+        </span>
       </button>
     </li>
   );
@@ -217,13 +258,11 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
   return (
     <section className="explorer" id="explore">
       <div className="container">
-        <div className="section-head">
-          <p className="eyebrow">The bigger pattern</p>
-          <h2 className="section-title">I’ve grouped my work by five recurring forms of disconnect</h2>
-        </div>
-
         <div className="explorer-card">
           <div className="explorer-main">
+            <h2 className="explorer-title">
+              Four sources of confusion I observed that create the <em>translation gap</em>
+            </h2>
             <Orbit
               nodes={countedThemes}
               activeIds={focusIds}
@@ -244,7 +283,7 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
             <div className="explorer-side-inner">
               <div className="side-head">
                 <h2 className="side-title">
-                  Work{' '}
+                  Work that addresses the confusion{' '}
                   <span className="side-count">
                     {applied.length ? `${shownProjects.length} of ${projects.length}` : projects.length}
                   </span>
@@ -277,15 +316,17 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
                       </button>
                       {open && (
                         <div className="facet-menu" role="group" aria-label={`Filter by ${facet.label.toLowerCase()}`}>
-                          {facet.options.map((option) => {
+                          {facet.options.map((option, n) => {
                             const on = filters[facet.id].includes(option.id);
+                            const heading = option.group && option.group !== facet.options[n - 1]?.group && option.group;
                             // how many results choosing this would give, with the other groups as they are
                             const count = projects.filter(
                               (p) => passes(p, filters, facet.id) && facet.has(p, option.id)
                             ).length;
                             return (
+                              <Fragment key={option.id}>
+                              {heading && <span className="facet-group">{heading}</span>}
                               <button
-                                key={option.id}
                                 type="button"
                                 className={`facet-option ${on ? 'is-on' : ''}`}
                                 style={{ '--c': option.color ?? 'var(--navy)' }}
@@ -297,6 +338,7 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
                                 {option.label}
                                 <span className="chip-count">{count}</span>
                               </button>
+                              </Fragment>
                             );
                           })}
                         </div>
@@ -418,7 +460,7 @@ export default function App() {
           onDone={introDone}
         />
       )}
-      <Header theme={theme} onToggleTheme={toggleTheme} />
+      <Header theme={theme} onToggleTheme={toggleTheme} onAbout={openAbout} />
       {page === 'contact' ? (
         <main>
           <ContactPage />
@@ -435,7 +477,7 @@ export default function App() {
             revealed={intro !== 'playing'}
             figureVisible={intro === 'done'}
           />
-          <Story onOpenProject={openProject} />
+          <Story />
           <Explorer
             aboutOpen={modal?.type === 'about'}
             onOpenAbout={openAbout}
