@@ -1,0 +1,6 @@
+node_modules
+dist
+.DS_Store
+
+# the original photo; the site uses the smaller intro_prof.jpg
+src/docs/intro_prof copy.png
