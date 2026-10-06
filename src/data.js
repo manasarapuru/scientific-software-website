@@ -46,7 +46,7 @@ export const profile = {
         {
           role: 'Applied learning projects',
           org: 'UCSC Genome Browser Reimagined · AI-Powered Poster Companion',
-          detail: 'Applying what I’m learning to test and sharpen that philosophy, as I pivot from bioinformatics toward scientific software after a layoff from Thermo Fisher.',
+          detail: 'Applying what I’m learning across biology, design and technology, as I hone in on an interdisciplinary skill set.',
           dates: 'Spring 2026',
         },
       ],
