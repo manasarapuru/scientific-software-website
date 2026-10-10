@@ -210,6 +210,7 @@ export default function ProjectModal({ project, onClose }) {
       <p className="eyebrow eyebrow-skill" style={{ '--c': theme.color }}>
         <span className="chip-dot" /> {theme.label} · {project.kind}
         {statusById[project.status] && ` · ${statusById[project.status].label}`}
+        {project.place && ` · ${project.place}`}
         {project.year && ` · ${project.year}`}
       </p>
       <h2 id="project-modal-title" className="modal-title">{project.title}</h2>

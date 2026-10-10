@@ -16,8 +16,10 @@ export default function AboutModal({ onClose, onContact }) {
         </div>
       </div>
 
-      <div className="modal-section">
-        <h3>Timeline</h3>
+      <p className="about-bio">{profile.bio}</p>
+
+      <div className="modal-section about-path">
+        <h3>My path</h3>
         <ol className="timeline">
           {profile.timeline.map((chapter, i) => (
             <li

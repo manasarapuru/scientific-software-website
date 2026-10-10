@@ -157,6 +157,12 @@ const FACETS = [
     })(),
     has: (project, id) => project.skills.includes(id),
   },
+  {
+    id: 'place',
+    label: 'Where',
+    options: [...new Set(projects.map((p) => p.place).filter(Boolean))].map((place) => ({ id: place, label: place })),
+    has: (project, id) => project.place === id,
+  },
 ];
 const NO_FILTERS = Object.fromEntries(FACETS.map((f) => [f.id, []]));
 
@@ -195,12 +201,9 @@ function ProjectCard({ project, state, onHover, onOpen }) {
         <span className="project-title">{project.title}</span>
         <span className="project-tagline">{project.tagline}</span>
         <span className="project-foot">
-          {/* a status doesn't apply to everything; the year then sits alone */}
-          {status ? (
-            <span className="project-status" style={{ '--c': status.color }}>{status.label}</span>
-          ) : (
-            <span />
-          )}
+          {/* a status doesn't apply to everything */}
+          {status && <span className="project-status" style={{ '--c': status.color }}>{status.label}</span>}
+          {project.place && <span className="project-place">{project.place}</span>}
           {project.year && <span className="project-year">{project.year}</span>}
         </span>
       </button>
@@ -260,9 +263,13 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
       <div className="container">
         <div className="explorer-card">
           <div className="explorer-main">
-            <h2 className="explorer-title">
-              Four sources of confusion I observed that create the <em>translation gap</em>
-            </h2>
+            <div className="explorer-intro">
+              <h2 className="explorer-title">Four sources of confusion.</h2>
+              <p className="explorer-text">
+                Across my work I’ve observed four places where the translation gap opens up. Each one is paired
+                with the work that addresses it.
+              </p>
+            </div>
             <Orbit
               nodes={countedThemes}
               activeIds={focusIds}
@@ -279,24 +286,8 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
             )}
           </div>
 
-          <aside className="explorer-side">
+          <aside className="explorer-side" aria-label="Work">
             <div className="explorer-side-inner">
-              <div className="side-head">
-                <h2 className="side-title">
-                  Work that addresses the confusion{' '}
-                  <span className="side-count">
-                    {applied.length ? `${shownProjects.length} of ${projects.length}` : projects.length}
-                  </span>
-                </h2>
-                <div className="filter-actions">
-                  {applied.length > 0 && (
-                    <button type="button" className="filter-clear" onClick={clearFilters}>
-                      Clear all
-                    </button>
-                  )}
-                </div>
-              </div>
-
               {/* one menu per kind of filter; each opens over the list, so the list keeps its space */}
               <div className="facet-bar">
                 {FACETS.map((facet) => {
@@ -346,6 +337,20 @@ function Explorer({ aboutOpen, onOpenAbout, onOpenProject }) {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* how many are showing, and, while filters are applied, a way to clear them */}
+              <div className="side-head">
+                <span className="side-count">
+                  {applied.length
+                    ? `Showing ${shownProjects.length} of ${projects.length}`
+                    : `Showing all ${projects.length}`}
+                </span>
+                {applied.length > 0 && (
+                  <button type="button" className="filter-clear" onClick={clearFilters}>
+                    Clear all
+                  </button>
+                )}
               </div>
 
               {/* what is applied, each removable, under the menus */}

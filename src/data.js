@@ -21,7 +21,7 @@ export const profile = {
     {
       period: '2026',
       label: 'Solidifying an interdisciplinary skill set',
-      summary: 'Intentionally seeking out opportunities and coursework that pushed me to learn how to connect biology, design, and technology principles.',
+      summary: 'Seeking out work and coursework that connect biology, design and technology.',
       color: '#0E7490',
       current: true,
       certs: [
@@ -32,21 +32,20 @@ export const profile = {
       ],
       roles: [
         {
-          role: 'UX Critic & Designer Volunteer',
-          org: 'California Academy of Life Sciences',
+          role: 'UX Critic & Interface Designer Volunteer',
+          org: 'California Academy of Sciences',
           detail: 'Scientific Computing Department',
           dates: 'Aug 2026 – Present',
         },
         {
-          role: 'Member',
+          role: 'Member, User Experience Working Group',
           org: 'US Research Software Engineering Association',
-          detail: 'User Experience Working Group',
           dates: 'Aug 2026 – Present',
         },
         {
           role: 'Applied learning projects',
           org: 'UCSC Genome Browser Reimagined · AI-Powered Poster Companion',
-          detail: 'Applying what I’m learning across biology, design and technology, as I hone in on an interdisciplinary skill set.',
+          detail: 'Putting what I’m learning into practice on real scientific tools.',
           dates: 'Spring 2026',
         },
       ],
@@ -54,6 +53,7 @@ export const profile = {
     {
       period: '2024 – 2025',
       label: 'Industry',
+      summary: 'Building tools that put bioinformatics capability in the hands of the teams who needed it.',
       color: '#1D4ED8',
       certs: [{ name: 'IBM Full Stack Software Developer Specialization', issuer: 'Coursera', dates: 'Apr 2024' }],
       roles: [
@@ -68,6 +68,7 @@ export const profile = {
     {
       period: '2021 – 2023',
       label: 'Graduate school & research',
+      summary: 'Where I first built an interface for researchers, and saw how much the design of a tool decides whether it gets used.',
       color: '#6D28D9',
       roles: [
         {
@@ -77,9 +78,8 @@ export const profile = {
           dates: 'Mar 2021 – Aug 2023',
         },
         {
-          role: 'Bioinformatics Master’s Student',
+          role: 'M.S. Bioinformatics',
           org: 'Boston University',
-          detail: 'Bioinformatics',
           dates: 'Sept 2021 – May 2023',
         },
       ],
@@ -110,8 +110,9 @@ export const profile = {
       ],
     },
   ],
+  // The About popup's introduction, above the timeline.
   bio:
-    'I sit between the bench and the codebase. My background spans molecular diagnostics, neurodegenerative disease research and microbiology, and I now build the tools that make that science faster: pipelines, analysis apps and AI-assisted workflows designed around how scientists actually work.',
+    'I started in microbiology, moved into bioinformatics, and kept noticing the same thing: the science was sound, but the tools around it were hard for people to use. I now work where biology, software and design meet, building scientific software around how its users think.',
   facts: [
     { label: 'Focus', value: 'Bioinformatics tools, AI-assisted workflows, scientist-facing UX' },
     { label: 'Experience', value: 'Molecular diagnostics, neurodegenerative disease, microbiology' },
@@ -128,7 +129,8 @@ export const socials = [
 // The story carousel between the hero and the explorer: the problem → why it's hard → how I work → beyond software.
 // `pose` sets what the guide avatar holds: question | scale | bulb | orbit | wave.
 // `caption` is what the guide "says" while that slide is showing.
-export const story = [
+// Slides marked `hidden: true` are kept here but left off the site.
+const allStory = [
   {
     id: 'problem',
     label: 'The problem',
@@ -161,6 +163,7 @@ export const story = [
   },
   {
     id: 'beyond',
+    hidden: true, // off for now
     label: 'Beyond software',
     pose: 'wave',
     caption: 'And it doesn’t stop at software.',
@@ -170,6 +173,8 @@ export const story = [
     ],
   },
 ];
+
+export const story = allStory.filter((slide) => !slide.hidden);
 
 // The disconnects the projects address. Order = clockwise from the top of the orbit.
 // Each project names one of these in its `theme`, or several as an array.
@@ -281,6 +286,7 @@ export const skills = [
 ];
 
 // `year` is optional: when the work was done, shown on the card and in the popup.
+// `place` is optional: where it was done, shown as a tag on the card and in the popup.
 // `skills` lists the tools and methods used, by name; they show as tags in the popup and as filter options.
 // `stat` is optional: a before/after figure shown at the top of the project popup.
 // `meta` is optional: a short line of context shown under the tagline in the project popup.
@@ -306,11 +312,12 @@ export const skills = [
 const allProjects = [
   {
     id: 'data-access',
+    place: 'Thermo Fisher Scientific',
     year: '2025',
     status: 'delivered',
     theme: 'access',
     kind: 'Project',
-    title: 'Self-Service Tool for Cross-Team Data Access',
+    title: 'Self-Service Bioinformatics Analyzer',
     tagline: 'Turning a bioinformatics request into a tool the team can run without bioinformatics',
     skills: ['Bioinformatics', 'SQL', 'Linux', 'Python', 'Streamlit', 'FastAPI', 'Flow diagram', 'Interviews'],
     stat: { from: 'Up to 2 days', to: 'Under 1 minute', label: 'Turnaround for a data request' },
@@ -364,7 +371,7 @@ const allProjects = [
       {
         heading: 'Design goals',
         list: [
-          'Enable the customer-facing team to generate the data independently',
+          'Enable a non-bioinformatics team to generate the data independently',
           'Reduce handoffs between teams',
           'Translate the existing technical workflow into terms users already understand',
           'Preserve the accuracy and reliability of the underlying analysis',
@@ -507,11 +514,12 @@ const allProjects = [
   },
   {
     id: 'rag-metadata',
+    place: 'Thermo Fisher Scientific',
     year: '2025',
     status: 'testing',
     theme: 'understanding',
     kind: 'Project',
-    title: 'RAG Chatbot for Exploring Datasets and Generating Metadata',
+    title: 'Context-Aware RAG Chatbot',
     tagline: 'Bringing context to raw datasets through conversation, so they can be understood and put to use',
     skills: ['RAG', 'LLMs', 'Python', 'SQL', 'FastAPI', 'React.js', 'User feedback', 'Flow diagram'],
     details: [
@@ -656,11 +664,12 @@ const allProjects = [
   },
   {
     id: 'alzheimers',
+    place: 'Boston University',
     year: '2023',
     status: 'delivered',
     theme: 'understanding',
     kind: 'Project',
-    title: 'Visualization Platform for Alzheimer’s Disease Research',
+    title: 'In-Lab Alzheimer’s Research Data Explorer',
     tagline: 'Organizing complex disease data around the questions researchers actually ask',
     skills: ['Neurodegenerative disease research', 'HTML', 'CSS', 'JavaScript', 'Plotly.js', 'Python'],
     details: [
@@ -857,6 +866,7 @@ const allProjects = [
   },
   {
     id: 'ucsc',
+    place: 'Independent',
     year: '2026',
     status: 'concept',
     theme: 'navigation',
@@ -864,7 +874,7 @@ const allProjects = [
     title: 'UCSC Genome Browser Reimagined',
     tagline: 'A self-initiated redesign exploring density and hierarchy in scientific tooling',
     skills: ['Claude', 'Figma', 'React.js', 'Heuristic evaluation', 'Survey design'],
-    meta: 'Independent · 2026 · Bioinformatics Tooling · Design exploration, tested concept · Live front-end prototype, no backend',
+    meta: 'Bioinformatics Tooling · Design exploration, tested concept · Live front-end prototype, no backend',
     details: [
       {
         heading: 'Product',
@@ -1038,6 +1048,7 @@ const allProjects = [
   },
   {
     id: 'posters',
+    place: 'Independent',
     year: '2026',
     status: 'concept',
     theme: 'communication',
@@ -1045,7 +1056,7 @@ const allProjects = [
     title: 'AI-Powered Short-Form Companion for Scientific Posters',
     tagline: 'Making dense research easier to take in at a glance',
     skills: ['React.js', 'LLMs', 'User flow design'],
-    meta: 'Independent · 2026 · Research Communication · Design exploration, untested concept',
+    meta: 'Research Communication · Design exploration, untested concept',
     details: [
       {
         heading: 'Product',
@@ -1198,6 +1209,7 @@ const allProjects = [
   // TODO: the titles are placeholders. Replace them with the podcast's and the art account's names.
   {
     id: 'podcast',
+    place: 'Independent',
     hidden: true, // not released yet
     year: '2026',
     status: 'soon',
@@ -1216,6 +1228,7 @@ const allProjects = [
   },
   {
     id: 'art',
+    place: 'Independent',
     year: '2026',
     theme: 'communication',
     kind: 'Hobby',
@@ -1262,17 +1275,18 @@ const allProjects = [
   },
   {
     id: 'academy-volunteer',
+    place: 'California Academy of Sciences',
     year: '2026',
     status: 'testing',
     theme: 'navigation',
     kind: 'Volunteer',
-    title: 'UX Critic & Designer',
-    tagline: 'California Academy of Life Sciences · Scientific Computing Department',
+    title: 'UX Critic & Interface Designer',
+    tagline: 'California Academy of Sciences · Scientific Computing Department',
     skills: ['UX critique', 'User flow design', 'Flow diagram', 'Interaction testing', 'Bug reporting'],
     details: [
       {
         heading: 'Role',
-        text: 'Volunteer UX critic and designer with the Scientific Computing Department at the California Academy of Life Sciences, reviewing an existing interface and designing how people move through it.',
+        text: 'Volunteer UX critic and interface designer with the Scientific Computing Department at the California Academy of Sciences, reviewing an existing interface and designing how people move through it.',
       },
       {
         heading: 'Challenge',

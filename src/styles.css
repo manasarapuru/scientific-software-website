@@ -1026,23 +1026,28 @@ button.nav-link {
   gap: 32px;
 }
 
-/* The panel's title sits inside it, over the orbit, so this panel and the one above both carry
-   their own headings and neither has one floating outside. */
+/* The panel's heading sits inside it, over the orbit, set like a slide in the approach panel
+   above: a short serif title with a line of text beneath. */
+.explorer-intro {
+  max-width: 34em;
+  text-align: center;
+}
+
 .explorer-title {
-  max-width: 22em;
   font-family: var(--serif);
   font-weight: 500;
-  font-size: clamp(1.25rem, 2.1vw, 1.75rem);
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  text-align: center;
-  text-wrap: balance;
+  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
-.explorer-title em {
-  font-style: italic;
-  color: var(--accent);
+.explorer-text {
+  margin-top: 12px;
+  font-size: clamp(15px, 1.2vw, 16.5px);
+  line-height: 1.65;
+  color: var(--ink-2);
+  text-wrap: balance;
 }
 
 .explorer-side {
@@ -1354,7 +1359,7 @@ button.nav-link {
   align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .side-title {
@@ -1372,8 +1377,7 @@ button.nav-link {
 }
 
 .side-count {
-  margin-left: 4px;
-  letter-spacing: 0;
+  font-size: 13px;
 }
 
 .theme-filter .chip.is-active .chip-count {
@@ -1410,6 +1414,7 @@ button.nav-link {
 /* Filter menus: a row of buttons, each opening a list of options over the top of the project list. */
 .facet-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-bottom: 12px;
 }
@@ -1704,14 +1709,27 @@ button.nav-link {
 /* The foot of the card: the status as a pill, and the year across from it. */
 .project-foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 6px 8px;
   width: 100%;
   margin-top: 10px;
 }
 
+/* where the work was done, as an outlined tag beside the status */
+.project-place {
+  padding: 2px 9px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--ink-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+}
+
 .project-year {
+  margin-left: auto;
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
@@ -4067,6 +4085,10 @@ ul.modal-chips li + li {
   }
 }
 
+.about-path {
+  margin-top: 32px;
+}
+
 .about-facts {
   margin: 24px 0 0;
   display: grid;
@@ -4316,10 +4338,6 @@ ul.modal-chips li + li {
   /* the site's own deep teal: the avatar's top and the light theme's accent */
   background: #0d7a66;
   border-left-color: transparent;
-}
-
-[data-theme='dark'] .explorer-side .side-title {
-  color: #fff;
 }
 
 [data-theme='dark'] .explorer-side .side-count,
@@ -4577,9 +4595,6 @@ ul.modal-chips li + li {
   .orbit {
     width: 82%;
   }
-  .explorer-title {
-    font-size: 1.25rem;
-  }
   .facet-menu {
     min-width: min(232px, 78vw);
   }
@@ -4646,10 +4661,6 @@ ul.modal-chips li + li {
   }
   .orbit-me-label {
     font-size: 11.5px;
-  }
-  .side-head {
-    flex-direction: column;
-    gap: 2px;
   }
   .modal {
     padding: 28px 20px 24px;
